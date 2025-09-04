@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} Success {% endblock %}
+
+{% block body %}
+<style>
+    body {
+            background-color: #f8f9fa;
+        }
+        .success-container {
+            margin-top: 80px;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container success-container">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h1 class="mb-3">Payment Successful!</h1>
+        <p class="lead">Thank you for your purchase. Your order has been placed successfully.</p>
+        <div>
+            <a href="{{ url_for('views.home') }}" class="btn btn-success btn-custom">
+                <i class="fas fa-store"></i> Continue Shopping
+            </a>
+            <a href="{{ url_for('views.orders') }}" class="btn btn-primary btn-custom">
+                <i class="fas fa-box"></i> View My Orders
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

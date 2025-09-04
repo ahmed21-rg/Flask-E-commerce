@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ✅ Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+  <!-- ✅ Font Awesome (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-dLXYgHu5xRxz3zFUZSkT8hzAFJr6UnVSkB1q2Cm6rAbYTK4wIVQwRmy6S27NTI8IsqNzhh1eIR9cPlqkTVa1ew=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- ✅ Optional: Bootstrap Icons (if needed elsewhere) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <!-- ✅ Your custom styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+
+  <title>Amazon - {% block title %}{% endblock %}</title>
+
+  <!-- ✅ Bootstrap JS dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+        <!-- ✅ Flash messages -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissable fade show mt-2 mx-2" role="alert">
+    <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+
+    {% block body %}
+    {% endblock %}
+</body>

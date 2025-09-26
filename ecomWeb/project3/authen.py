@@ -2,10 +2,10 @@ from flask_bcrypt import check_password_hash
 from flask import Blueprint, render_template, flash, redirect
 from .forms import Signup_Form, Login_Form, ChangePassword
 from .models import Customer, db
-from .init import bcrypt  # Import the bcrypt instance
+from .init import bcrypt  
 from flask_login import login_user, logout_user, current_user, login_required
 
-auth = Blueprint("auth", __name__)  # No url_prefix, so routes are at /login and /Signup
+auth = Blueprint("auth", __name__)  
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
@@ -15,7 +15,7 @@ def login():
         password = form.password.data
         customer = Customer.query.filter_by(email=email).first()
         if customer and check_password_hash(customer.password, password):
-            login_user(customer)  # Assuming you have a login_user function to handle user session
+            login_user(customer) 
             flash('Login successful!', 'success')
             return redirect('/home')
     return render_template('login.html', form=form)
@@ -35,11 +35,11 @@ def Signup():
             return redirect('/Signup')
 
         if password == confirm_password:
-            password_h = bcrypt.generate_password_hash(password).decode('utf-8')  # Use the bcrypt instance
+            password_h = bcrypt.generate_password_hash(password).decode('utf-8')  
             new_customer = Customer(username=username, email=email, password=password_h)            
         
             db.session.add(new_customer)
-            db.session.commit()  # Commit the new customer to the database
+            db.session.commit() 
             flash('Account created successfully! You can now log in.', 'success')
             return redirect('/home')
 
@@ -57,9 +57,9 @@ def logout():
 @auth.route('/profile/<int:id>')
 @login_required
 def profile(id):
-    # Fetch the customer from the database using the provided id
+  
     customer = Customer.query.get(id)
-    # Render the profile.html template, passing the customer object
+   
     return render_template('profile.html', customer=customer)
 
 @auth.route('/change_password/<int:id>' ,methods=['GET', 'POST'])
@@ -80,7 +80,7 @@ def change_password(id):
             
         if customer.verify_password(current_password):
             if new_password == confirm_new_password:
-                customer.set_password(new_password)  # Use the set_password method to hash the new password
+                customer.set_password(new_password)  
                 db.session.commit()
                 flash('Password changed successfully!', 'success')
                 return redirect('/home')
@@ -89,5 +89,6 @@ def change_password(id):
         else: 
             flash('Current password is incorrect!', 'danger')
     return render_template('change_password.html', form=form)
+
 
 

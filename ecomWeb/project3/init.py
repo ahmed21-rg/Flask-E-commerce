@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 
 
-db = SQLAlchemy()  # Create the SQLAlchemy database object
-bcrypt = Bcrypt()  # Create the Bcrypt object
+db = SQLAlchemy()  
+bcrypt = Bcrypt()  
 
 def create_app():
 
@@ -25,7 +25,7 @@ def create_app():
     app.config['STRIPE_PUBLIC_KEY'] = ("STRIPE_PUBLIC_KEY")
     stripe.api_key = os.getenv("STRIPE_API_KEY")
     
-    db.init_app(app)  # Bind SQLAlchemy to your Flask app
+    db.init_app(app) 
 
     @app.errorhandler(404)
     def page_not_found(error):
@@ -34,8 +34,7 @@ def create_app():
 
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'  # Set the login view for Flask-Login
-
+    login_manager.login_view = 'auth.login' 
     @login_manager.user_loader
     def load_user(id):
         return Customer.query.get(int(id))
@@ -52,5 +51,6 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
 
     return app

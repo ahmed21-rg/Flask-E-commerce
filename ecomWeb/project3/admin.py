@@ -9,10 +9,9 @@ import os
 admin = Blueprint("admin", '__name__')
 
 
-@admin.route('/media/<path:filename>')    # to show images in shop-items
+@admin.route('/media/<path:filename>')    
 def get_image(filename):
-    return send_from_directory('static/media', filename)  # Serve images from the static/media directory
-
+    return send_from_directory('static/media', filename) 
 @admin.route('/add-shop-items', methods=['GET', 'POST'])
 def add_shop_items():
     if current_user.id == 1:
@@ -26,10 +25,10 @@ def add_shop_items():
 
             file = form.product_picture.data
             file_name = secure_filename(file.filename)
-            # Save to static/images/ inside your project
+           
             save_path = os.path.join(current_app.root_path, 'static', 'media', file_name)
 
-            # Store the relative path for use in templates
+           
             file_path = f'/static/media/{file_name}'
             file.save(save_path)
 
@@ -38,12 +37,12 @@ def add_shop_items():
             new_shop_items.current_price = current_price
             new_shop_items.previous_price = previous_price
             new_shop_items.in_stock = in_stock
-            new_shop_items.product_picture = file_path  # Save the relative path in the database
+            new_shop_items.product_picture = file_path 
 
             
             try:
-                db.session.add(new_shop_items)  # Add the new product to the session
-                db.session.commit()  # Commit the session to save the product in the database
+                db.session.add(new_shop_items) 
+                db.session.commit()
                 flash(f'{product_name} Product added successfully!', 'success')
                 print('product added successfully')
                 return render_template('add-shop-items.html', form=form)
@@ -70,16 +69,16 @@ def shop_items():
 def update_item(id):
     if current_user.id == 1:
         form = ShopItems()
-        item = Product.query.get(id)        #get the product by id
+        item = Product.query.get(id)        
         if request.method == 'GET':
-            form.product_name.data = item.product_name    # populates the update form with existing data
+            form.product_name.data = item.product_name    
             form.current_price.data = item.current_price
             form.previous_price.data = item.previous_price
             form.in_stock.data = item.in_stock
             form.flash_sale.data = item.flash_sale
 
         if form.validate_on_submit():
-            product_name = form.product_name.data    # assigning product name from form
+            product_name = form.product_name.data  
             current_price = form.current_price.data
             previous_price = form.previous_price.data   
             in_stock = form.in_stock.data
@@ -90,18 +89,18 @@ def update_item(id):
             file_name = secure_filename(file.filename)
             file_path = (f'/static/media/{file_name}')
 
-            file.save(save_path)  # Save the file to the specified path
-            try:           # gets the product by id and updates it with new data
-                Product.query.filter_by(id=id).update(dict( product_name=product_name,           #works as dict {key : value,}
+            file.save(save_path) 
+            try:      
+                Product.query.filter_by(id=id).update(dict( product_name=product_name,          
                                                             current_price=current_price,
                                                             previous_price=previous_price,
                                                             in_stock=in_stock,
                                                             flash_sale=flash_sale,
                                                             product_picture=file_path))    
-                db.session.commit()  # Commit the changes to the database
+                db.session.commit()  
                 flash(f'{product_name} Product updated successfully!', 'success')
                 print('product updated successfully')
-                return redirect('/admin/shop-items')  # Redirect to the shop items page after successful update
+                return redirect('/admin/shop-items')  
             except Exception as e:
                 print(e)
                 flash('item not updated', 'danger')
@@ -117,7 +116,7 @@ def delete_item(id):
         try:
             item = Product.query.get(id)
                 
-            db.session.delete(item)  # Delete the item from the database
+            db.session.delete(item)  
             db.session.commit()
             flash(f' Product deleted successfully!', 'success')
             return redirect('/admin/shop-items')
@@ -141,20 +140,20 @@ def view_orders():
 def update_order(id):
     if current_user.id == 1:
         form = OrdersForm()
-        order = Order.query.get(id)      #get the order by id
+        order = Order.query.get(id) 
 
         if request.method == 'GET':
-            form.order_status.data = order.status    # populates the update form with existing data --> goes to database and fetches the status of that order
+            form.order_status.data = order.status   
 
         if form.validate_on_submit():
-            status = form.order_status.data  # assigning order status from form
-            order.status = status  # update the order status
+            status = form.order_status.data
+            order.status = status  
             
             try:
-                db.session.commit()  # Commit the changes to the database
+                db.session.commit() 
 
                 flash(f' Order status updated successfully!', 'success')
-                return redirect('/admin/view_orders')  # Redirect to the shop items page after successful update
+                return redirect('/admin/view_orders')
 
             except Exception as e:
                 print(e)
@@ -181,4 +180,5 @@ def customers():
 def admin_home():
     if current_user.id == 1:
         return render_template('admin_home.html')
+
     return render_template('404.html')
